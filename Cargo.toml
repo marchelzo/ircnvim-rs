@@ -1,0 +1,10 @@
+[package]
+name = "ircnvim"
+version = "0.1.0"
+authors = ["Bradley Garagan <bradgaragan@gmail.com>"]
+
+[dependencies]
+time = "0.1.34"
+rustc-serialize = "*"
+regex = "*"
+lazy_static = "*"
