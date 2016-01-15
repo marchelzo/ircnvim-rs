@@ -1,6 +1,6 @@
 ### ircnvim-rs
 
-This is the server part of ircnvim.
+This is the server part of [ircnvim]](https://github.com/marchelzo/ircnvim).
 
 Installation instructions:
 
