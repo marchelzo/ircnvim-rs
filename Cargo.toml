@@ -7,4 +7,3 @@ authors = ["Bradley Garagan <bradgaragan@gmail.com>"]
 time = "0.1.34"
 rustc-serialize = "*"
 regex = "*"
-lazy_static = "*"
