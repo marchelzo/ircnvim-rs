@@ -622,13 +622,20 @@ impl Session {
     fn wait_for_or(&mut self, good: &str, bad: &str) -> bool {
         let mut buf = [0u8; BUFFER_SIZE];
         let mut idx = 0usize;
-        while let Ok(msg) = Session::read_message(&mut self.stream, &mut buf, &mut idx).and_then(|bs| IrcMessage::parse(&bs[..])) {
-            msg.log();
-            let good = msg.contains(good);
-            let bad = msg.contains(bad);
-            self.handle_message(msg);
-            if good { return true }
-            if bad { return false }
+        loop {
+            match Session::read_message(&mut self.stream, &mut buf, &mut idx).and_then(|bs| IrcMessage::parse(&bs[..])) {
+                Ok(msg) => {
+                    msg.log();
+                    let good = msg.contains(good);
+                    let bad = msg.contains(bad);
+                    self.handle_message(msg);
+                    if good { return true }
+                    if bad { return false }
+                },
+                Err(e)  => {
+                    self.die(&e);
+                }
+            }
         }
 
         return false;
@@ -643,11 +650,18 @@ impl Session {
     fn wait_for(&mut self, good: &str) -> bool {
         let mut buf = [0u8; BUFFER_SIZE];
         let mut idx = 0usize;
-        while let Ok(msg) = Session::read_message(&mut self.stream, &mut buf, &mut idx).and_then(|bs| IrcMessage::parse(&bs[..])) {
-            msg.log();
-            let good = msg.contains(good);
-            self.handle_message(msg);
-            if good { return true }
+        loop {
+            match Session::read_message(&mut self.stream, &mut buf, &mut idx).and_then(|bs| IrcMessage::parse(&bs[..])) {
+                Ok(msg) => {
+                    msg.log();
+                    let good = msg.contains(good);
+                    self.handle_message(msg);
+                    if good { return true }
+                },
+                Err(e)  => {
+                    self.die(&e);
+                }
+            }
         }
 
         return false;
