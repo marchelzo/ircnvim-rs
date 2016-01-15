@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+mkdir -p ~/.ircnvim
+
+cat > ~/.ircnvim/config <<EOF
+# Profiles must be separated by blank lines!
+# 
+# The syntax for a profile is:
+# 
+# PROFILE_NAME
+# server SERVER_HOSTNAME:PORT 
+# nick NICKNAME
+# username USERNAME
+# password PASSWORD
+# auth AUTHMETHOD
+# 
+# password and auth are optional; the rest are mandatory.
+# 
+# valid auth methods are 'SASL' and 'none'. (NickServ will be supported in the future)
+
+# freenode
+# server irc.freenode.net:6667
+# nick your_nick
+# username your_username
+# password your_password
+
+# moznet
+# server irc.mozilla.org:6667
+# nick your_nick
+# username your_username
+# password your_password
+EOF
+
+cat <<EOF
+
+Before you can use ircnvim, you need at least one profile in your
+configuration file.
+
+The configuration file can be found at $HOME/.ircnvim/config, and it
+contains several examples already.
+
+EOF

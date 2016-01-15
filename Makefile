@@ -5,3 +5,4 @@ ircnvim:
 
 install:
 	cp ./target/release/ircnvim /usr/local/bin/ircnvim
+	bash setup

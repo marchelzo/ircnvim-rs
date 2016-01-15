@@ -6,6 +6,7 @@ Installation instructions:
 
     1. Install nightly Rust
     2. Clone this repository, and run `make && sudo make install`
+    3. Create at least one profile in the configuration file
 
 ```sh
 curl -sSf https://static.rust-lang.org/rustup.sh | sh -s -- --channel=nightly && \
