@@ -29,6 +29,7 @@ fn parse_color<I>(bytes: &mut I) -> (Option<u8>, Option<u8>) where I: Iterator<I
 
 impl Text {
     pub fn from_bytes(mut bytes: Vec<u8>) -> Text {
+
         let mut raw = String::new();
         let mut chunks = Vec::new();
         let mut ctcp = false;

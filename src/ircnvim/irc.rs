@@ -55,7 +55,7 @@ pub struct IrcMessage {
 }
 
 /*
- * Helper function that should probably go somewhere else.
+ * Helper functions that should probably go somewhere else.
  */
 fn take_while_ref<T, I, F>(iter: &mut Peekable<I>, f: F) -> Vec<T>
     where F: Fn(&T) -> bool,
@@ -70,6 +70,14 @@ fn take_while_ref<T, I, F>(iter: &mut Peekable<I>, f: F) -> Vec<T>
     }
 
     return result;
+}
+
+fn skip_while_ref<T, I, F>(iter: &mut Peekable<I>, f: F)
+    where F: Fn(&T) -> bool,
+          I: Iterator<Item=T>,
+          T: Copy {
+
+    loop { if !iter.peek().map(&f).unwrap_or(false) { break } }
 }
 
 impl IrcMessage {
@@ -169,6 +177,12 @@ impl IrcMessage {
         let mut params = Vec::new();
 
         while bytes.next() == Some(b' ') {
+            /*
+             * If only trailing spaces remain, just break.
+             */
+            skip_while_ref(&mut bytes, |&b| b == b' ');
+            if bytes.peek() == None { break }
+
             if bytes.peek() == Some(&b':') {
                 bytes.next();
                 let bytes = bytes.collect::<Vec<_>>();
@@ -176,7 +190,9 @@ impl IrcMessage {
                 params.push(Text::from_bytes(bytes));
                 break;
             } else {
-                params.push(Text::from_bytes(take_while_ref(&mut bytes, |&b| b != b' ')));
+                let bytes = take_while_ref(&mut bytes, |&b| b != b' ');
+                log!("PARAMETER: `{}`\n", str::from_utf8(&bytes[..]).unwrap());
+                params.push(Text::from_bytes(bytes));
             }
         }
 

@@ -354,7 +354,7 @@ impl Session {
                 let source = message.source();
                 let target = message.param(0).text();
                 let room = if self.get_room(target).is_some() {
-                    self.get_room(target).unwrap()
+                    self.get_room(target).expect("get room")
                 } else {
                     self.server()
                 };
