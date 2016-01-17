@@ -2,6 +2,11 @@
 
 mkdir -p ~/.ircnvim
 
+if [ -f ~/.ircnvim/config ]; then
+    echo "$HOME/.ircnvim/config already exists. Nothing to setup!"
+    exit
+fi
+
 cat > ~/.ircnvim/config <<EOF
 # Profiles must be separated by blank lines!
 # 
