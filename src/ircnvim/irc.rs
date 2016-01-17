@@ -186,6 +186,7 @@ impl IrcMessage {
             if bytes.peek() == Some(&b':') {
                 bytes.next();
                 let bytes = bytes.collect::<Vec<_>>();
+                if bytes.is_empty() { break }
                 log!("calling Text::from_bytes on:\n  {}", str::from_utf8(&bytes[..]).unwrap());
                 params.push(Text::from_bytes(bytes));
                 break;
@@ -291,6 +292,12 @@ mod tests {
             IrcMessageType::Ping => { },
             _                    => unreachable!()
         }
+    }
+
+    #[test]
+    fn test_quit() {
+        let message = IrcMessage::parse(b":harukomoto!~harukomot@93-34-148-177.ip50.fastwebnet.it QUIT :").unwrap();
+
     }
 
     #[test]

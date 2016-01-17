@@ -219,6 +219,9 @@ impl Session {
      */
     fn handle_input(&mut self, input: &str) {
 
+        // nothing to do
+        if input.is_empty() { return }
+
         /*
          * First check to see if the input begins with a /. If it does
          * then we should treat it as a command and not a regular message.
