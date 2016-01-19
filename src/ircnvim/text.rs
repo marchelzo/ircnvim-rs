@@ -130,6 +130,22 @@ impl Text {
             }]
         };
     }
+    pub fn action(s: String) -> Text {
+        return Text {
+            raw: s.clone(),
+            ctcp: true,
+            action: true,
+            chunks: vec![TextChunk {
+                text: s,
+                fg: DEFAULT_COLOR,
+                bg: DEFAULT_COLOR,
+                bold: false,
+                italic: false,
+                underline: false,
+                reverse: false
+            }]
+        };
+    }
 
     pub fn text(&self) -> &str {
         return &self.raw;

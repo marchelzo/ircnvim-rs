@@ -256,6 +256,14 @@ impl Session {
         log!("arg: `{}`", arg); 
 
         commands! {
+            me => {
+                if self.active_room().is_server() { return }
+                let arg = arg.trim();
+                let target = self.active_room().target().to_string();
+                self.send(&format!("PRIVMSG {} :\x01ACTION {}\x01", target, arg));
+                let message = Message::action(&self.config.nick, arg.to_string());
+                self.active_room_mut().add_message(message);
+            },
             j | join => {
                 for channel in arg.split_whitespace() {
                     self.send(&format!("JOIN {}", channel));

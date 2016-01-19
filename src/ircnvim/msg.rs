@@ -27,6 +27,15 @@ impl Message {
         };
     }
 
+    /*
+     * Make an ACTION from ourselves.
+     */
+    pub fn action(nick: &str, body: String) -> Message {
+        let source = Text::decorate_nick(nick);
+        let body = Text::action(body);
+        return Message::new(source, body);
+    }
+
     pub fn notification(body: Text) -> Message {
         let time = time::now();
         let text = format!(" [{}] {: >18}  {}", time.strftime("%H:%M:%S").unwrap(), "", body.text());
