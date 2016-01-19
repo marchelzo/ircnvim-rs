@@ -388,7 +388,7 @@ impl Session {
             },
             Quit    => {
                 let user = message.user();
-                let reason = message.param(0).text();
+                let reason = if message.params().len() > 0 { Some(message.param(0).text()) } else { None };
                 for room in &mut self.rooms {
                     if room.is_user_present(&user) {
                         room.handle_quit(&user, reason);

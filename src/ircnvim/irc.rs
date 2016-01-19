@@ -297,6 +297,9 @@ mod tests {
     #[test]
     fn test_quit() {
         let message = IrcMessage::parse(b":harukomoto!~harukomot@93-34-148-177.ip50.fastwebnet.it QUIT :").unwrap();
+        let message = IrcMessage::parse(b":Andrius!~andrius@5ec081cd.skybroadband.com QUIT :").unwrap();
+        let message = IrcMessage::parse(b":randomstatistic!~randomsta@64.124.61.215 QUIT :").unwrap();
+        assert_eq!(message.params().len(), 0);
 
     }
 

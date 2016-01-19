@@ -5,6 +5,7 @@ use ircnvim::msg::Message;
 use ircnvim::text::Text;
 use ircnvim::user::User;
 use ircnvim::_my_nick_regex;
+use std::cmp::max;
 use std::fs::File;
 use std::io::Write;
 use std::iter::Iterator;
@@ -16,7 +17,7 @@ pub enum RoomType {
     Server
 }
 
-#[derive(PartialEq, Eq)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
 pub enum NotifyLevel {
     Nothing,     // literally no activity
     Unimportant, // joins, parts, quits, etc., but no privmsgs
@@ -106,11 +107,11 @@ impl Room {
         let nick_regex = unsafe { &*_my_nick_regex };
         writeln!(self.file, "{}", message.text).unwrap();
         if message.is_notification {
-            self.notify = Unimportant;
+            self.notify = max(self.notify, Unimportant);
         } else if nick_regex.is_match(message.body.text()) {
-            self.notify = Important;
+            self.notify = max(self.notify, Important);
         } else {
-            self.notify = Normal;
+            self.notify = max(self.notify, Normal);
         }
         self.msgs.push(message);
     }
@@ -168,8 +169,11 @@ impl Room {
         }
     }
 
-    pub fn handle_quit(&mut self, user: &User, reason: &str) {
-        self.notify(&format!("{} [{}] has quit ({})", user.nick, user.to_string(), reason));
+    pub fn handle_quit(&mut self, user: &User, reason: Option<&str>) {
+        match reason{
+            Some(r) => self.notify(&format!("{} [{}] has quit ({})", user.nick, user.to_string(), r)),
+            None    => self.notify(&format!("{} [{}] has quit", user.nick, user.to_string()))
+        }
         match self.kind {
             RoomType::Channel(ref mut c) => c.remove_user(user),
             RoomType::Private(_)         => { },
