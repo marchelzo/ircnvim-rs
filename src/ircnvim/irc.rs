@@ -252,8 +252,13 @@ impl IrcMessage {
             Some(UserPrefix(ref u)) => {
                 if u.nick == "ChanServ" {
                     let param = self.param(1).text();
-                    let closing_bracket = param.find(']').expect("ChanServ NOTICE without bracketed channel");
-                    (&param[1..closing_bracket], param)
+                    let target = {
+                        match param.find(']') {
+                            Some(i) => &param[1..i],
+                            None    => "server"
+                        }
+                    };
+                    (target, param)
                 } else {
                     ("server", self.param(1).text())
                 }
