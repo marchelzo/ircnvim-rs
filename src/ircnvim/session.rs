@@ -294,6 +294,9 @@ impl Session {
             },
             nick => {
                 self.send(&format!("NICK {}", arg.trim()));
+            },
+            whois => {
+                self.send(&format!("WHOIS {}", arg.trim()));
             }
         };
 
